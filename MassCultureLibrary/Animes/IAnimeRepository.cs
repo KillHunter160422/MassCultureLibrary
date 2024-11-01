@@ -7,6 +7,7 @@ namespace MassCultureLibrary.Animes
         Task<Anime?> GetByIdAsync(Guid id);
         Task UpdateAsync(Anime anime);
         Task DeleteAsync(Guid id);
+        void AddAsync();
     }
 
 }

@@ -17,8 +17,9 @@ namespace MassCultureLibrary.Tests
         public AnimeMangaTests()
         {
             var animeRepository = new Mock<IAnimeRepository>();
-            var animeService = new Mock<IAnimeService>();
-            _animeService = animeService.Object;
+            animeRepository.Setup(x => x.AddAsync(It.IsAny<Anime>())).ReturnsAsync((Anime anime) => anime);
+            var animeService = new AnimeService(animeRepository.Object);
+            _animeService = animeService;
             _anime = new Anime {Id = Guid.NewGuid(), Title = "Наруто", Genre = "Экшен", Status = "Завершено" };
         }
 
@@ -28,11 +29,25 @@ namespace MassCultureLibrary.Tests
             var anime = _anime;
 
             var result = await _animeService.AddAnimeAsync(anime);
+            
 
             result.Should().NotBeNull();
             result.Title.Should().Be("Наруто");
         }
 
+        [Fact]
+        public async Task AddAnime_ShouldEqualsAddAnime()
+        {
+            var anime = _anime;
+
+            var result = await _animeService.AddAnimeAsync(anime);
+
+            result.Should().NotBeNull();
+            result.Title.Should().Be("Наруто");
+
+
+
+        }
         [Fact]
         public async Task GetAnimeByStatus_ShouldReturnAnimeWithCorrectStatus()
         {
